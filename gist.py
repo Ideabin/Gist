@@ -18,6 +18,7 @@ if PY3:
     from .request import *
     from .settings import *
     from .helpers import *
+    from . import frontmatter
 else:
     from request import *
     from settings import *
@@ -55,7 +56,7 @@ def create_gist(public, description, files):
             sublime.error_message("Gist: Unable to create a Gist with empty content")
             return
 
-    file_data = dict((filename, {'content': text}) for filename, text in list(files.items()))
+    file_data = dict((filename, {'content': frontmatter.loads(text).content}) for filename, text in list(files.items()))
     data = json.dumps({'description': description, 'public': public, 'files': file_data})
     gist = api_request(settings.GISTS_URL, data)
     return gist
@@ -214,6 +215,8 @@ class GistCommand(sublime_plugin.TextCommand):
                 gist_html_url = gist['html_url']
                 sublime.set_clipboard(gist_html_url)
                 sublime.status_message("%s Gist: %s" % (self.mode(), gist_html_url))
+                # Todo: PY3 check required?
+                self.view.run_command('gist_set_id', {'gistid': gist['id']})
 
                 if gistify:
                     gistify_view(self.view, gist, list(gist['files'].keys())[0])
@@ -222,7 +225,11 @@ class GistCommand(sublime_plugin.TextCommand):
 
             window.show_input_panel('Gist File Name: (optional):', filename, on_gist_filename, None, None)
 
-        window.show_input_panel("Gist Description (optional):", '', on_gist_description, None, None)
+        desc = frontmatter.loads(region_data[0]).get('desc')
+        if desc:
+            on_gist_description(desc)
+        else:
+            window.show_input_panel("Gist Description (optional):", '', on_gist_description, None, None)
 
 
 class GistViewCommand(object):
@@ -241,6 +248,13 @@ class GistViewCommand(object):
 
     def gist_description(self):
         return self.view.settings().get("gist_description")
+
+
+class GistSetId(sublime_plugin.TextCommand):
+    def run(self, edit, gistid):
+        region = self.view.find(r'(?s)^\s*---(.*)---\s*$', 0)
+        content = self.view.substr(region).replace('id: ', 'id: ' + gistid)
+        self.view.replace(edit, region, content)
 
 
 class GistCopyUrl(GistViewCommand, sublime_plugin.TextCommand):
