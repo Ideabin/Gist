@@ -1,129 +1,34 @@
-# Gist [![Build Status](https://travis-ci.org/condemil/Gist.svg?branch=master)](https://travis-ci.org/condemil/Gist)
+# Gist 
 
-A [Sublime Text 2/3](http://www.sublimetext.com/) plugin for creating and editing Gists.
+This is a fork of the original plugin by [Condemil](https://github.com/condemil/Gist). See differences to know what has been changed. 
 
-
-# Installation
-
-## Package Control
-
-Install [Package Control](http://wbond.net/sublime_packages/package_control). Gist will show up in the package list. This is the recommended installation method.
-
-## Manual installation
+## Installation
 
 Go to the "Packages" directory (`Preferences` / `Browse Packages…`). Then clone this repository:
 
-    git clone git://github.com/condemil/Gist
+    git clone git://github.com/ideabin/Gist
 
+Consult the [original readme](https://github.com/condemil/Gist/blob/master/README.md) for any other stuff.
 
-# Generating Access Token
+## Differences from the original version
 
-As of [2013-05-16](https://github.com/blog/1509-personal-api-tokens), you can generate API Access Tokens via the Web UI or via the GitHub API.
-**All other authorization methods is deprecated.**
+#### Markdown gists now support Jekyll style YAML frontmatter
 
-## Web
-* Account Settings -> [Applications](https://github.com/settings/applications)
-* "Generate new token" under "Personal access tokens"
-* For "Token description" you should give it a meaningful name, Example: sublime gist
-* Under "Select scopes" you can just select gist
+```
+---
+id: {gist_id}
+desc: {gist_description}
+---
 
-Paste the token in the settings section under the token option.
+Contents of the gist.
+```
 
-## API
+I save all my idea files in a directory, so this allows sublime to detect the gist when the file is loaded again.
 
-Here's a command you can run from your terminal to generate a token via curl:
+#### `Ctrl + K` `Ctrl + N` A silly new command to create a new idea (just creates a new tab with a starting template.)
 
-    curl -v -u USERNAME -X POST https://api.github.com/authorizations --data "{\"scopes\":[\"gist\"], \"note\": \"SublimeText 2/3 Gist plugin\"}"
+## Todo
 
-Where USERNAME is your Github username. Save the token generated and paste it in the settings section under the token option.
-
-
-# Options
-
-Edit the settings file (it should open automatically the first time you use a Gist command) to specify either token.
-
-*   `"token": ""`
-
-    You must enter your GitHub token here
-
-*   `"https_proxy": http://user:pass@proxy:port`
-
-    You can enter https proxy here
-    Format: "http://user:pass@proxy:port"
-
-*   `"enterprise": false`
-
-    Set this to true if you want to use a enterprise version of github instead of github.com
-
-*   `"url": ""`
-
-    Set the url of the enterprise version of github you want to use. Leave this blank if the enterprise option is set to false.
-
-*   `"max_gists": 100`
-
-    Set the maximum number of Gists that can will fetched by the plugin. It can't be higher than 100, because of GitHub API limitations.
-
-* `"gist_prefix": ""`
-
-    Limit the Gists displayed in the `Open Gist` list by prefix. Leave blank to display all Gists. Example: `"gist_prefix": "Snippet:"` will only list Gists with names starting with the text **Snippet:**.
-
-* `"save-update-hook": true`
-
-    Set the on-save behaviour of a loaded Gist. True implies that when the Gist is saved, it'll update the online Gist. False implies that it'll bring up a save dialog for the Gist to be saved to disk.
-
-
-# Usage
-
-All functionality of the plugin is available in the `Tools` / `Gist` menu and in the command pallette.
-
-## Creating Gists
-
-Use the `Gist` / `Create Public Gist` or `Gist` / `Create Private Gist` commands. If you don't have anything selected, a Gist will be created with contents of current file, URL of that Gist will be copied to the clipboard and then the file will switch to Gist editing mode. If you have selected some text, a Gist will be created using only that text and then immediately opened for editing. In case of multiple selections, you'll get one Gist with multiple files.
-
-## Editing existing Gists
-
-Use the `Gist` / `Open Gist` command to see a list of your Gists. Selecting one will open the files from that Gist in new tabs. You can then edit the files normally and save to update the Gist, or use other commands to change Gist description, remove or rename files, or delete the Gist.
-
-
-## Adding new files to existing Gists
-
-Use the `Gist` / `Add File To Gist` command to see a list of your Gists. Selecting one will add contents of current file as a new file to that Gist and switch the file to Gist editing mode.
-
-
-# Default key bindings:
-
-## Create Public Gist
-
-* Windows and Linux: `Ctrl+K` `Ctrl+I`
-* OS X: `Super+K` `Super+I`
-
-## Create Private Gist
-
-* Windows and Linux: `Ctrl+K` `Ctrl+P`
-* OS X: `Super+K` `Super+P`
-
-## Update File
-
-* Windows and Linux: `Ctrl+K` `Ctrl+S`
-* OS X: `Super+K` `Super+S`
-
-## Open Gist
-
-* Windows and Linux: `Ctrl+K` `Ctrl+O`
-* OS X: `Super+K` `Super+O`
-
-## Insert Gist
-
-* Windows and Linux: `Ctrl+K` `Ctrl+[`
-* OS X: `Super+K` `Super+[`
-
-## Add File
-
-* Windows and Linux: `Ctrl+K` `Ctrl+]`
-* OS X: `Super+K` `Super+]`
-
-# Information
-
-Source: https://github.com/condemil/Gist
-
-Authors: [Dmitry Budaev](https://github.com/condemil/), [Alexey Ermakov](https://github.com/technocoreai)
+* Multiple files?
+* Update Gist Description
+* Update Gist
