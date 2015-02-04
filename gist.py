@@ -253,7 +253,7 @@ class GistViewCommand(object):
 class GistSetId(sublime_plugin.TextCommand):
     def run(self, edit, gistid):
         region = self.view.find(r'(?s)^\s*---(.*)---\s*$', 0)
-        content = self.view.substr(region).replace('id: ', 'id: ' + gistid)
+        content = self.view.substr(region).replace('id:', 'id: ' + gistid)
         self.view.replace(edit, region, content)
 
 
